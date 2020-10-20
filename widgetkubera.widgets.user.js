@@ -9,7 +9,7 @@
 // ==/UserScript==
 
 requirejs.config({
-	baseUrl: 'https://raw.githubusercontent.com/widgetkubera/widgets/master/',
+	baseUrl: 'https://raw.githubusercontent.com/widgetkubera/widgets/main/',
 });
 
 define('Promise', () => Promise);
@@ -40,7 +40,7 @@ define('FETCH', function () {
 require(['FETCH','Promise','Loader'], (FETCH,Promise,Loader) => {
 	console.log(FETCH, Promise, Loader);
 
-	window.open('https://raw.githubusercontent.com/widgetkubera/widgets/master/widgetkubera.widgets.user.js');
+	window.open('https://raw.githubusercontent.com/widgetkubera/widgets/main/widgetkubera.widgets.user.js');
 });
 
 
