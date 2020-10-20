@@ -1,4 +1,4 @@
-define(['Promise'], (Promise) => {
+define(() => {
 	class Loader {
 		constructor (loaderFunction) {
 			this._result = null;

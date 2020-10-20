@@ -5,19 +5,24 @@
 // @grant    GM.xmlHttpRequest
 // @grant    GM_xmlHttpRequest
 // @require  https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js
-// @require  https://polyfill.io/v3/polyfill.js?features=fetc
 // ==/UserScript==
 
 requirejs.config({
 	baseUrl: 'https://raw.githubusercontent.com/widgetkubera/widgets/main/',
 });
+requirejs.onError = (error) => console.error(error);
 
-define('Promise', () => Promise);
+define('Promise',() => Promise);
 define('FETCH', function () {
+	var GMxmlHttpRequest = null;
 
-	const GMxmlHttpRequest = GM_xmlHttpRequest ? GM_xmlHttpRequest : GM.xmlHttpRequest;
+	try {
+		GMxmlHttpRequest = GM_xmlHttpRequest;
+	} catch (e) {
+		GMxmlHttpRequest = GM.xmlHttpRequest;
+	}
 	
-	async function FETCH (data={}) {
+	function FETCH (data={}) {
 		return new Promise((load,err) => {
 			data.onload = load;
 			data.onerror = data.onabort = data.ontimeout = function (e) { console.error(e); err(e); };
@@ -25,10 +30,26 @@ define('FETCH', function () {
 		});
 	}
 
-	async function GET (url) {
-		return (await FETCH({method:"GET", url:url})).response;
+	function GET (url) {
+		return FETCH({method:"GET", url:url}).then(res => res.response);
 	}
 
+	requirejs.load = ((load) => {//enable cross domain loading
+		function makeError (id, msg, err, requireModules) {
+			var e = new Error(msg + '\nhttp://requirejs.org/docs/errors.html#' + id);
+			e.requireType = id;
+			e.requireModules = requireModules;
+			if (err) e.originalError = err;
+			return e;
+		}
+
+		return function (context, moduleName, url) {
+			GET(url).then(text => {
+				eval(text);
+				context.completeLoad(moduleName);
+			}).catch(err => load(context, moduleName, url));
+		};
+	})(requirejs.load);
 
 	return {
 		FETCH,
@@ -37,11 +58,9 @@ define('FETCH', function () {
 	};
 });
 
-require(['FETCH','Promise','Loader'], (FETCH,Promise,Loader) => {
-	console.log(FETCH, Promise, Loader);
+
+requirejs(['FETCH','Loader','Widget'], function (FETCH, Loader, Widget) {
+	console.log(requirejs, FETCH, Loader, Widget);
 
 	window.open('https://raw.githubusercontent.com/widgetkubera/widgets/main/widgetkubera.widgets.user.js');
 });
-alert('1');
-
-
