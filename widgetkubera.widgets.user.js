@@ -42,5 +42,6 @@ require(['FETCH','Promise','Loader'], (FETCH,Promise,Loader) => {
 
 	window.open('https://raw.githubusercontent.com/widgetkubera/widgets/main/widgetkubera.widgets.user.js');
 });
+alert('1');
 
 
