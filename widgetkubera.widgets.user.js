@@ -16,9 +16,12 @@ define('Promise',() => Promise);
 define('FETCH',['Promise'], function (Promise) {
 	var GMxmlHttpRequest = null;
 
-	try 		GMxmlHttpRequest = GM_xmlHttpRequest;
-	catch (e)	GMxmlHttpRequest = GM.xmlHttpRequest;
-	
+	try {		
+		GMxmlHttpRequest = GM_xmlHttpRequest;
+	} catch (e)	{
+		GMxmlHttpRequest = GM.xmlHttpRequest;
+	}
+
 	function FETCH (data={}) {
 		return new Promise((load,err) => {
 			data.onload = load;
@@ -47,4 +50,4 @@ define('FETCH',['Promise'], function (Promise) {
 	};
 });
 
-requirejs(['index.js'], function () { });
+requirejs(['FETCH','index'], function () { });
