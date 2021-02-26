@@ -7,14 +7,25 @@
 // @require  https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js
 // ==/UserScript==
 
-requirejs.config({
-	baseUrl: 'https://raw.githubusercontent.com/widgetkubera/widgets/test/',
+
+define('config.baseUrl', () => {
+	const baseUrl = 'https://raw.githubusercontent.com/widgetkubera/widgets/test/';
+
+	requirejs.config({
+		baseUrl: baseUrl,
+	});
+
+	requirejs.onError = (error) => {
+		//console.error(error);
+		throw error;
+	}
+
+	return baseUrl;
 });
-requirejs.onError = (error) => console.error(error);
 
 define('Promise',() => Promise);
 
-define('FETCH',['Promise'], function (Promise) {
+define('FETCH',['Promise','config.baseUrl'], function (Promise,baseUrl) {
 	var GMxmlHttpRequest = null;
 
 	try {		
@@ -26,7 +37,10 @@ define('FETCH',['Promise'], function (Promise) {
 	function FETCH (data={}) {
 		return new Promise((load,err) => {
 			data.onload = load;
-			data.onerror = data.onabort = data.ontimeout = function (e) { console.error(e); err(e); };
+			data.onerror = data.onabort = data.ontimeout = function (e) {
+				//console.error(e);
+				err(e);
+			};
 			GMxmlHttpRequest (data);
 		});
 	}
