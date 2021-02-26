@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name     widgetkubera widgets loader
+// @name     widgetkubera test widgets loader
 // @include	 *
 // @version  1
 // @grant    GM.xmlHttpRequest
@@ -8,11 +8,12 @@
 // ==/UserScript==
 
 requirejs.config({
-	baseUrl: 'https://raw.githubusercontent.com/widgetkubera/widgets/main/',
+	baseUrl: 'https://raw.githubusercontent.com/widgetkubera/widgets/test/',
 });
 requirejs.onError = (error) => console.error(error);
 
 define('Promise',() => Promise);
+
 define('FETCH',['Promise'], function (Promise) {
 	var GMxmlHttpRequest = null;
 
@@ -36,8 +37,8 @@ define('FETCH',['Promise'], function (Promise) {
 
 	requirejs.load = ((load) => {//enable cross domain loading
 		return function (context, moduleName, url) {
-			GET(url).then(text => {
-				eval(text);
+			GET(url).then(code => {
+				eval(code);
 				context.completeLoad(moduleName);
 			}).catch(err => load(context, moduleName, url));
 		};

@@ -1,3 +1,3 @@
 define(() => {
-	alert('index.js');
+	console.log(location.href)
 });
