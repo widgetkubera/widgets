@@ -13,7 +13,7 @@ requirejs.config({
 requirejs.onError = (error) => console.error(error);
 
 define('Promise',() => Promise);
-define('FETCH', function () {
+define('FETCH',['Promise'], function (Promise) {
 	var GMxmlHttpRequest = null;
 
 	try 		GMxmlHttpRequest = GM_xmlHttpRequest;
@@ -32,7 +32,6 @@ define('FETCH', function () {
 	}
 
 	requirejs.load = ((load) => {//enable cross domain loading
-
 		return function (context, moduleName, url) {
 			GET(url).then(text => {
 				eval(text);
@@ -48,8 +47,4 @@ define('FETCH', function () {
 	};
 });
 
-requirejs(['FETCH'], function (FETCH) {
-	//console.log(requirejs, FETCH);
-
-	//window.open('https://raw.githubusercontent.com/widgetkubera/widgets/main/widgetkubera.widgets.user.js');
-});
+requirejs(['index.js'], function () { });

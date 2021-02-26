@@ -1,0 +1,3 @@
+define(() => {
+	alert('index.js');
+});
